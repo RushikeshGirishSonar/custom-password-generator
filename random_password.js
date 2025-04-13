@@ -1,44 +1,35 @@
-// Random Password Generator
+function generatePassword(length, includeLowercase, includeUppercase, includeNumbers, includeSymbols){
+  const lowercasechars = "abcdefghijklmnopqrstuvwxyz";
+  const uppercasechars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numberchars = "0123456789";
+  const symbolchars = "!@#$%&*()_+-=";
+  let allowedchars = "";
+  let password = "";
 
-function generatePassword(passwordLength, includeLowercase, includeUppercase, includeNumbers, includeSymbols){
-    
-    const lowercasechars = "abcdefghijklmnopqrstuvwxyz";
-    const uppercasechars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const numberchars = "0123456789";
-    const symbolchars = "!@#$%&*()_+-=";
-    let allowedchars = "";
-    let password = "";
+  allowedchars += includeLowercase ? lowercasechars : "";
+  allowedchars += includeUppercase ? uppercasechars : "";
+  allowedchars += includeNumbers ? numberchars : "";
+  allowedchars += includeSymbols ? symbolchars : "";
 
-    allowedchars += includeLowercase ? lowercasechars : "";
-    allowedchars += includeUppercase ? uppercasechars : "";
-    allowedchars += includeNumbers ? numberchars : "";
-    allowedchars += includeSymbols ? symbolchars : "";
+  if(length <= 0) return 'Password length must be at least 1.';
+  if(allowedchars.length === 0) return 'Select at least one character set.';
 
-    if(passwordLength <= 0){
-        return '(password length must be at least 1)';
-    }
-    if(allowedchars.length === 0){
-        return '(At least 1 set of character needs to be selected !)';
-    }
-    // console.log(1);
-    for(let i = 0; i<passwordLength; i++){
-        const randomIndex = Math.floor(Math.random() * allowedchars.length);
-        password += allowedchars[randomIndex];
-        // console.log(`password = ${password}`);
-    }
-// console.log(2);
-    return password;
+  for(let i = 0; i < length; i++){
+    const randomIndex = Math.floor(Math.random() * allowedchars.length);
+    password += allowedchars[randomIndex];
+  }
+  return password;
 }
 
-const passwordLength = 10;
-const includeLowercase = true;
-const includeUppercase = true;
-const includeNumbers = true;
-const includeSymbols = true;
+document.getElementById("passwordForm").addEventListener("submit", function(e){
+  e.preventDefault();
 
-const password1   = generatePassword(passwordLength,
-                                    includeLowercase,
-                                    includeUppercase,
-                                    includeNumbers,
-                                    includeSymbols);
-console.log(`Generated password : ${password1}`);
+  const length = parseInt(document.getElementById("length").value);
+  const includeLowercase = document.getElementById("lowercase").checked;
+  const includeUppercase = document.getElementById("uppercase").checked;
+  const includeNumbers = document.getElementById("numbers").checked;
+  const includeSymbols = document.getElementById("symbols").checked;
+
+  const password = generatePassword(length, includeLowercase, includeUppercase, includeNumbers, includeSymbols);
+  document.getElementById("result").textContent = password;
+});
